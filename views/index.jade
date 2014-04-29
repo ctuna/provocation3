@@ -7,7 +7,7 @@ html
     script.
       // connect socket.io to server
       var socket = io.connect('http://localhost:8080');
-            
+
       // when a "sensorReading" message comes through, show its value by
       // writing the text of the div with id=showValue
       socket.on('sensorReading', function (data) {
@@ -24,5 +24,5 @@ html
     h1 Node Serial Server Demo with Socket.IO
     p Current sensor value is:
       #showValue not yet available
-    button#ledOn(onClick="toggle('1');") LED ON 
+    button#ledOn(onClick="toggle('1');") LED ON
     button#ledOff(onClick="toggle('0');") LED OFF
