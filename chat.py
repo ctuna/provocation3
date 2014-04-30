@@ -15,14 +15,14 @@ fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
 
 try:
     while 1:
- 
+
         try:
             c = sys.stdin.read(1)
             ser.write(c)
-            print 'keypress: ' + c 
+            print 'keypress: ' + c
         except IOError: pass
 finally:
     termios.tcsetattr(fd, termios.TCSAFLUSH, oldterm)
     fcntl.fcntl(fd, fcntl.F_SETFL, oldflags)
-    
+
 

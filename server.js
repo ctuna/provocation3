@@ -1,7 +1,7 @@
-// node.js server that reads sensor data from an attached Arduino board and publishes it 
+// node.js server that reads sensor data from an attached Arduino board and publishes it
 // Arduino must run code "nodeSerialServerArduino.ino"
 // uses socket.io to communicate with a single page without reloads
-// "http://localhost/" renders the page; 
+// "http://localhost/" renders the page;
 
 var sys = require("sys"); // to print debug messages
 var io = require('socket.io');
