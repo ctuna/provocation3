@@ -27,6 +27,8 @@ var app = express();
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
+app.use(express.static(__dirname + '/static'));
+
 app.get('/', function(req, res){
   //render the index.jade template
   //don't provide variables - we'll use socket.io for that
@@ -43,6 +45,7 @@ sp.on('open',function() {
   console.log('Port open');
 });
 
+// Setting up Static folder
 
 // when data arrives on the serial port, relay it via socket
 // to page as message "sensorReading"
