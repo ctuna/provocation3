@@ -5,16 +5,17 @@ html
     link(rel='stylesheet', href='css/style.css')
     link(src='http://fonts.googleapis.com/css?family=Oswald')
     script(src='/socket.io/socket.io.js')
+    script(src='/public/helper.js')
     script(src='http://code.jquery.com/jquery-1.10.1.min.js')
     script.
       // connect socket.io to server
       var socket = io.connect('http://localhost:8080');
-            
+
       // when a "sensorReading" message comes through, show its value by
       // writing the text of the div with id=showValue
-      socket.on('sensorReading', function (data) {
-          $("#showValue").text(data);
-      })
+
+      //KEYSTROKES
+
       // when the user clicks one of the buttons, they call toggle()
       // toggle emits a message to the socket with the new LED state
       function toggle (theState) {
@@ -23,5 +24,10 @@ html
       }
 
   body
-    p.sentence Current sensor value is:
-    p.sentence#showValue not yet available
+
+    p.sentence#0 
+    p.sentence#1 
+    p.sentence#2 
+    p.sentence#3 
+    p.sentence#4 
+

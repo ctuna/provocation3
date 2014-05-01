@@ -24,13 +24,10 @@ void loop() {
   
   while (Serial.available()){
    
-    char inChar = (char)Serial.read(); 
-    if (inChar == '\n') {
-      stringComplete = true;
-      postString();
-      
-    }
-    else append(inChar);
+    char inChar = (char)Serial.read();
+    append(inChar);
+    postString(inChar);
+    
   }
 } 
    
@@ -49,11 +46,15 @@ void blinkLights(){
    }
   }
 
-void postString(){
-  if (inputString=="blink"){
-    blinkLights();
+void postString(char inChar){
+//  if (inputString=="blink"){
+//    blinkLights();
+//  }
+  if (inChar == '\n') {
+    inputString = "";
+    Serial.println(inputString);
+    //reset input string
+  } else {
+    Serial.println(inputString);
   }
-  Serial.println(inputString);
-  inputString = "";
-  //reset input string
 }

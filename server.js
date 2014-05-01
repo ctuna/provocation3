@@ -1,15 +1,19 @@
-// node.js server that reads sensor data from an attached Arduino board and publishes it 
+// node.js server that reads sensor data from an attached Arduino board and publishes it
 // Arduino must run code "nodeSerialServerArduino.ino"
 // uses socket.io to communicate with a single page without reloads
-// "http://localhost/" renders the page; 
+// "http://localhost/" renders the page;
 
 var sys = require("sys"); // to print debug messages
 var io = require('socket.io');
+var stdin = process.openStdin();
 
 // SETUP SERIAL PORT
 
 //screen /dev/ttyUSB0 57600
-var portName = "/dev/tty.usbserial-AD02AY8A"; //TODO: change for your local system
+//different ports for different folks' arduino
+var clairePort = "/dev/tty.usbserial-A9014F2U"
+var elizabethPort =  "/dev/tty.usbserial-AD02AY8A"
+var portName = clairePort; //TODO: change for your local system
 var serialport = require("serialport");
 var SerialPort = serialport.SerialPort; // localize object constructor
 var sp = new SerialPort(portName, {
@@ -35,7 +39,9 @@ app.get('/', function(req, res){
   res.render('index');
 });
 
-
+app.configure(function () {
+    app.use('/public', express.static(__dirname + '/public'));
+});
 // Start listening on port 8080
 var server = app.listen(8080);
 var io = require('socket.io').listen(server);
@@ -47,8 +53,13 @@ sp.on('open',function() {
 
 // Setting up Static folder
 
+
+
+
+
 // when data arrives on the serial port, relay it via socket
 // to page as message "sensorReading"
+
 sp.on("data", function (data) {
   sys.puts("received value: " + data);
   io.sockets.emit("sensorReading",data);
