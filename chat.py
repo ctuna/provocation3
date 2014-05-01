@@ -1,5 +1,5 @@
 import termios, fcntl, sys, os, serial, time, smtplib
-ser = serial.Serial('/dev/tty.usbserial-AD02AY8A', 9600, writeTimeout = 0)
+ser = serial.Serial('/dev/tty.usbserial-A9014F2U', 9600, writeTimeout = 0)
 time.sleep(2)
 
 
