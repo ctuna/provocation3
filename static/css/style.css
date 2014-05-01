@@ -64,7 +64,11 @@ body {
 .sentence {
   font: 75px "Oswald", "Helvetica", "Arial", sans-serif;
   text-transform: uppercase;
-  color: white; }
+  color: white;
+  background: none;
+  border: none;
+  outline: none;
+  display: none; }
 
 #caption {
   display: none;
