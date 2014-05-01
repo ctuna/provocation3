@@ -45,10 +45,35 @@ table {
   border-collapse: collapse;
   border-spacing: 0; }
 
+body,
+html {
+  width: 100%;
+  height: 100%; }
+
 body {
   background: black; }
 
+#wrapper {
+  width: 100%;
+  height: 100%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 50px; }
+
 .sentence {
-  font: 50px "Oswald", "Helvetica", "Arial", sans-serif;
+  font: 75px "Oswald", "Helvetica", "Arial", sans-serif;
+  text-transform: uppercase;
+  color: white;
+  background: none;
+  border: none;
+  outline: none;
+  display: none; }
+
+#caption {
+  display: none;
+  font: 23px "Open Sans";
+  font-weight: 300;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: white; }

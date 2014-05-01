@@ -4,9 +4,11 @@ html
     title aNonY
     link(rel='stylesheet', href='css/style.css')
     link(src='http://fonts.googleapis.com/css?family=Oswald')
+    link(src='http://fonts.googleapis.com/css?family=Open+Sans:300')
+    script(src='http://code.jquery.com/jquery-1.10.1.min.js')
     script(src='/socket.io/socket.io.js')
     script(src='/public/helper.js')
-    script(src='http://code.jquery.com/jquery-1.10.1.min.js')
+    script(src='/public/interact.js')
     script.
       // connect socket.io to server
       var socket = io.connect('http://localhost:8080');
@@ -25,9 +27,10 @@ html
 
   body
 
-    p.sentence#0 
-    p.sentence#1 
-    p.sentence#2 
-    p.sentence#3 
-    p.sentence#4 
-
+    div#wrapper
+      input.sentence#0(maxlength="9")
+      input.sentence#1(maxlength="9")
+      input.sentence#2(maxlength="9")
+      input.sentence#3(maxlength="9")
+      input.sentence#4(maxlength="9")
+      #caption Press ENTER to submit
