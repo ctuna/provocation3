@@ -59,11 +59,13 @@ body {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 50px; }
+  padding: 50px;
+  -webkit-transform: rotateX(-29deg) scaleX(0.95); }
 
 .sentence {
-  font: 75px "Oswald", "Helvetica", "Arial", sans-serif;
+  font: 120px "Oswald", "Helvetica", "Arial", sans-serif;
   text-transform: uppercase;
+  height: 150px;
   color: white;
   background: none;
   border: none;
@@ -71,8 +73,9 @@ body {
   display: none; }
 
 #caption {
+  margin-top: 15px;
   display: none;
-  font: 23px "Open Sans";
+  font: 30px "Open Sans", "Helvetica", "Arial", sans-serif;
   font-weight: 300;
   letter-spacing: 0.25em;
   text-transform: uppercase;
