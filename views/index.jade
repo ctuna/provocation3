@@ -9,6 +9,9 @@ html
     script(src='/socket.io/socket.io.js')
     script(src='/public/helper.js')
     script(src='/public/interact.js')
+
+    script(src='/public/speakClient.js')
+
     script.
       // connect socket.io to server
       var socket = io.connect('http://localhost:8080');
@@ -33,5 +36,6 @@ html
       input.sentence#2(maxlength="9")
       input.sentence#3(maxlength="9")
       input.sentence#4(maxlength="9")
-      input.sentence#kitten
+
       #caption Press ENTER to submit
+    div#audio
