@@ -18,7 +18,7 @@ var sentence = [];
 //RFID SCANNING
 //time when scan started
 var scanStartMillis;
-
+var lastRFID=""; 
 
 //seconds we'll wait, 200 is real with cal id reader 
 //var SCAN_TIMEOUT= 200;
@@ -54,9 +54,7 @@ document.onkeydown = function(evt) {
         else if (currentStatus == StatusEnum.TYPING){
 
           focusLine(wordIndex);
-
-          sentence[wordIndex]+=charStr;
-          
+          if (sentence[wordIndex].length < MAX_WORD_LENGTH){ sentence[wordIndex]+=charStr;}
 
           $('#caption').show();
           if (charCode === 13) {
@@ -108,9 +106,17 @@ function tryScan(charStr){
       var scanTime = scanEndMillis - scanStartMillis;
       if (scanTime < SCAN_TIMEOUT){
         if (RFID.length == 5){
-          currentStatus = StatusEnum.TYPING;
-          sentence[wordIndex]="";
-          scanned();
+          if (RFID== lastRFID){
+            speak("can't use same R.F.I.D. twice" , { amplitude: 100, pitch: 30, speed: 135, wordgap: 5 });
+            currentStatus = StatusEnum.READY;
+            RFID = "";
+          }
+          else {
+            currentStatus = StatusEnum.TYPING;
+            lastRFID = RFID;
+            sentence[wordIndex]="";
+            scanned();
+        }
         }
       }
       //RESTART SCANNING IF TIMEOUT 
