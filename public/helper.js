@@ -172,6 +172,7 @@ function nextWord(){
   var currentDate = new Date();
   var jason = JSON.stringify({RFID: lastRFID, "WORD": sentence[wordIndex], "WORD_INDEX": wordIndex, "time": currentDate.getTime() });
   readSentence();
+  console.log(jason);
 
   //RESET
   currentStatus = StatusEnum.READY;
