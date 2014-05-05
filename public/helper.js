@@ -16,7 +16,7 @@ var StatusEnum = {
 var BACKSPACE = 8,
     ENTER = 13;
 
-var currentStatus = StatusEnum.READY; 
+var currentStatus = StatusEnum.READY;
 
 //manually keep track of every string
 var sentence = [];
@@ -24,15 +24,15 @@ var sentence = [];
 //RFID SCANNING
 //time when scan started
 var scanStartMillis;
-var lastRFID=""; 
+var lastRFID="";
 
-//seconds we'll wait, 200 is real with cal id reader 
+//seconds we'll wait, 200 is real with cal id reader
 //var SCAN_TIMEOUT= 200;
 var SCAN_TIMEOUT= 40000;
 //RFID so far
 var RFID = "";
 
-//for backspace detection 
+//for backspace detection
 document.onkeydown = function(evt) {
   evt = evt || window.event;
   var charCode = evt.keyCode || evt.which;
@@ -45,7 +45,7 @@ document.onkeydown = function(evt) {
 }
 
 
-//KEY PRESS CAN EITHER BE RFID OR KEYBOARD INPUT 
+//KEY PRESS CAN EITHER BE RFID OR KEYBOARD INPUT
 document.onkeypress = function(evt) {
 
   evt = evt || window.event;
@@ -58,7 +58,7 @@ document.onkeypress = function(evt) {
   if (currentStatus === StatusEnum.READY || currentStatus === StatusEnum.SCANNING){
     tryScan(charStr);
   }
- 
+
   else if (currentStatus === StatusEnum.TYPING) {
     focusLine(wordIndex);
 
@@ -97,7 +97,7 @@ document.onkeypress = function(evt) {
       }, 500);
     }
   }
-      
+
 }
 
 function readSentence(){
@@ -120,17 +120,17 @@ function hideLine(num){
 }
 
 function tryScan(charStr){
-  var currentDate = new Date(); 
+  var currentDate = new Date();
   if (isNumber(charStr)){
 
     //START SCANNING
     if (currentStatus === StatusEnum.READY){
       scanStartMillis = currentDate.getTime();
-      RFID = RFID + charStr; 
-      currentStatus = StatusEnum.SCANNING; 
+      RFID = RFID + charStr;
+      currentStatus = StatusEnum.SCANNING;
     }
     else if (currentStatus === StatusEnum.SCANNING){
-      RFID = RFID + charStr; 
+      RFID = RFID + charStr;
       var scanEndMillis = currentDate.getTime();
       var scanTime = scanEndMillis - scanStartMillis;
       if (scanTime < SCAN_TIMEOUT){
@@ -145,15 +145,15 @@ function tryScan(charStr){
             sentence[wordIndex] = "";
             scanned();
             currentStatus = StatusEnum.TYPING;
-            
+
           }
         }
       }
-      //RESTART SCANNING IF TIMEOUT 
+      //RESTART SCANNING IF TIMEOUT
       else {
         currentStatus = StatusEnum.READY;
         RFID = "";
-      } 
+      }
       }
     }
   }
@@ -169,9 +169,11 @@ function isNumber(n) {
 
 //change which input we're on, set focus to new input
 function nextWord(){
+  var currentDate = new Date();
+  var jason = JSON.stringify({RFID: lastRFID, "WORD": sentence[wordIndex], "WORD_INDEX": wordIndex, "time": currentDate.getTime() });
   readSentence();
 
-  //RESET 
+  //RESET
   currentStatus = StatusEnum.READY;
   RFID="";
 	wordIndex = (wordIndex+1)%numWords;
