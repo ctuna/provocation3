@@ -2,14 +2,18 @@
 var wordIndex = 0;
 var MAX_WORD_LENGTH = 9
 var numWords = 5;
+
 //boolean ready if true they have scanned ID,
 // if false they haven't yet and can't type
+
 var StatusEnum = {
-    READY : 0,
-    SCANNING : 1,
-    TYPING : 2
+  READY : 0,
+  SCANNING : 1,
+  TYPING : 2
 }
-var BACKSPACE = 8;
+
+var BACKSPACE = 8,
+    ENTER = 13;
 var currentStatus = StatusEnum.READY; 
 
 //manually keep track of every string
@@ -26,45 +30,50 @@ var SCAN_TIMEOUT= 40000;
 //RFID so far
 var RFID = "";
 
-
 //for backspace detection 
 document.onkeydown = function(evt) {
-   evt = evt || window.event;
-   var charCode = evt.keyCode || evt.which;
-  if (currentStatus == StatusEnum.TYPING){
-    if (charCode == BACKSPACE){
-      sentence[wordIndex] = sentence[wordIndex].substring(0, sentence[wordIndex].length-1);
-      }
+  evt = evt || window.event;
+  var charCode = evt.keyCode || evt.which;
+  if (currentStatus === StatusEnum.TYPING) {
+    if (charCode === BACKSPACE) {
+      sentence[wordIndex] = sentence[wordIndex].substring(0, sentence[wordIndex].length - 1);
+    } 
   }
 }
 
 
 //KEY PRESS CAN EITHER BE RFID OR KEYBOARD INPUT 
-      document.onkeypress = function(evt) {
+document.onkeypress = function(evt) {
       
-        evt = evt || window.event;
-        var charCode = evt.keyCode || evt.which;
-        //GRAB INPUT
-        var charStr = String.fromCharCode(charCode);
-        //READ RFID
-        if (currentStatus == StatusEnum.READY || currentStatus == StatusEnum.SCANNING){
-          tryScan(charStr);
-        }
-       
-        else if (currentStatus == StatusEnum.TYPING){
+  evt = evt || window.event;
+  var charCode = evt.keyCode || evt.which;
+  //GRAB INPUT
+  var charStr = String.fromCharCode(charCode);
+  //READ RFID
+  if (currentStatus == StatusEnum.READY || currentStatus == StatusEnum.SCANNING){
+    tryScan(charStr);
+  }
+ 
+  else if (currentStatus === StatusEnum.TYPING){
+    // focusLine(wordIndex);
+    if (sentence[wordIndex].length < MAX_WORD_LENGTH){ 
+      sentence[wordIndex] += charStr;
+    }
+    else {
+      $('#' + wordIndex).css("-webkit-animation-play-state", "running");
+      setTimeout(function() {
+        $('#' + wordIndex).css("-webkit-animation-play-state", "paused");
+      }, 500);
+    }
 
-          focusLine(wordIndex);
-          if (sentence[wordIndex].length < MAX_WORD_LENGTH){ sentence[wordIndex]+=charStr;}
-
-          $('#caption').show();
-          if (charCode === 13) {
-            $("#caption").hide();
-            nextWord();
-          }
-        }
-
-        
-      }
+    $('#caption').show();
+    if (charCode === ENTER) {
+      $("#caption").hide();
+      nextWord();
+    }
+  }
+      
+}
 
 function readSentence(){
 
@@ -76,18 +85,14 @@ function readSentence(){
 }
 
 function focusLine(num){
-
   $('#'+num).show();
   $('#'+num).focus();
-
-
+  $('#'+num).val("");
 }
 
-
-
 function hideLine(num){
-    $("#" + num).val("");
-    $("#" + num).hide()
+  $("#" + num).val("");
+  $("#" + num).hide()
 }
 
 function tryScan(charStr){
@@ -100,13 +105,13 @@ function tryScan(charStr){
       RFID = RFID + charStr; 
       currentStatus = StatusEnum.SCANNING; 
     }
-    else if (currentStatus == StatusEnum.SCANNING){
+    else if (currentStatus === StatusEnum.SCANNING){
       RFID = RFID + charStr; 
       var scanEndMillis = currentDate.getTime();
       var scanTime = scanEndMillis - scanStartMillis;
       if (scanTime < SCAN_TIMEOUT){
-        if (RFID.length == 5){
-          if (RFID== lastRFID){
+        if (RFID.length === 5){
+          if (RFID === lastRFID){
             speak("can't use same R.F.I.D. twice" , { amplitude: 100, pitch: 30, speed: 135, wordgap: 5 });
             currentStatus = StatusEnum.READY;
             RFID = "";
@@ -114,26 +119,26 @@ function tryScan(charStr){
           else {
             currentStatus = StatusEnum.TYPING;
             lastRFID = RFID;
-            sentence[wordIndex]="";
+            sentence[wordIndex] = "";
             scanned();
-        }
+          }
         }
       }
       //RESTART SCANNING IF TIMEOUT 
       else {
         currentStatus = StatusEnum.READY;
         RFID = "";
-        }
-       
+      } 
       }
     }
   }
 
 //called when the RFID has been scanned and the user can type in the next input
 function scanned(){
-  console.log("SCANNED");
   speak("scanned", { amplitude: 100, pitch: 30, speed: 135, wordgap: 5 });
+  focusLine(wordIndex);
 }
+
 function isNumber(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
