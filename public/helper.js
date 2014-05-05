@@ -170,7 +170,8 @@ function isNumber(n) {
 //change which input we're on, set focus to new input
 function nextWord(){
   var currentDate = new Date();
-  var jason = JSON.stringify({RFID: lastRFID, "WORD": sentence[wordIndex], "WORD_INDEX": wordIndex, "time": currentDate.getTime() });
+  var currentTime = currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
+  var jason = JSON.stringify({RFID: lastRFID, "WORD": sentence[wordIndex], "WORD_INDEX": wordIndex, "time": currentTime });
   readSentence();
   console.log(jason);
 
