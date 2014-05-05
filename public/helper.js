@@ -111,7 +111,7 @@ function readSentence(){
 function focusLine(num){
   $('#'+num).show();
   $('#'+num).focus();
-  $('#'+num).val("");
+  // $('#'+num).val("");
 }
 
 function hideLine(num){
@@ -145,6 +145,7 @@ function tryScan(charStr){
             sentence[wordIndex] = "";
             scanned();
             currentStatus = StatusEnum.TYPING;
+            
           }
         }
       }
