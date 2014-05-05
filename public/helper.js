@@ -36,6 +36,7 @@ document.onkeydown = function(evt) {
   var charCode = evt.keyCode || evt.which;
   if (currentStatus === StatusEnum.TYPING) {
     if (charCode === BACKSPACE) {
+      $('#char-limit').hide();1
       sentence[wordIndex] = sentence[wordIndex].substring(0, sentence[wordIndex].length - 1);
     } 
   }
@@ -55,21 +56,20 @@ document.onkeypress = function(evt) {
   }
  
   else if (currentStatus === StatusEnum.TYPING){
-    // focusLine(wordIndex);
-    if (sentence[wordIndex].length < MAX_WORD_LENGTH){ 
+    
+    $('#caption').show();
+    if (sentence[wordIndex].length < MAX_WORD_LENGTH){
       sentence[wordIndex] += charStr;
+    } else if (charCode === ENTER) {
+      $('.caption').hide();
+      nextWord();
     }
     else {
+      $('#char-limit').show();
       $('#' + wordIndex).css("-webkit-animation-play-state", "running");
       setTimeout(function() {
         $('#' + wordIndex).css("-webkit-animation-play-state", "paused");
       }, 500);
-    }
-
-    $('#caption').show();
-    if (charCode === ENTER) {
-      $("#caption").hide();
-      nextWord();
     }
   }
       

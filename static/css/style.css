@@ -75,10 +75,8 @@ body {
   -webkit-animation-delay: 0s;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-play-state: paused; }
-  .sentence.shaking {
-    -webkit-animation-play-state: running; }
 
-#caption {
+.caption {
   margin-top: 15px;
   display: none;
   font: 30px "Open Sans", "Helvetica", "Arial", sans-serif;
@@ -87,18 +85,22 @@ body {
   text-transform: uppercase;
   color: white; }
 
+#char-limit {
+  font-size: 20px;
+  margin-top: 5px; }
+
 @-webkit-keyframes shake {
   0%, 100% {
     -webkit-transform: translateX(0);
     transform: translateX(0); }
 
   20%, 60% {
-    -webkit-transform: translateX(-25px);
-    transform: translateX(-25px); }
+    -webkit-transform: translateX(-30px);
+    transform: translateX(-30px); }
 
   40%, 80% {
-    -webkit-transform: translateX(25px);
-    transform: translateX(25px); } }
+    -webkit-transform: translateX(30px);
+    transform: translateX(30px); } }
 
 .shake, .sentence {
   -webkit-animation-name: shake;
