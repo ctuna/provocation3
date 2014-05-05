@@ -55,14 +55,16 @@ document.onkeypress = function(evt) {
   var charStr = String.fromCharCode(charCode);
 
   //READ RFID
-  if (currentStatus == StatusEnum.READY || currentStatus == StatusEnum.SCANNING){
+  if (currentStatus === StatusEnum.READY || currentStatus === StatusEnum.SCANNING){
     tryScan(charStr);
   }
  
   else if (currentStatus === StatusEnum.TYPING) {
+    focusLine(wordIndex);
 
     // Turns on "Press ENTER to submit caption"
     $('#caption').show();
+    $('#scanid').hide();
 
     // If "ENTER" pressed
     if (charCode === ENTER) {
@@ -84,6 +86,8 @@ document.onkeypress = function(evt) {
 
     // If length is more than MAX_WORD_LENGTH
     } else {
+
+      // Shows character limit text
       $('#char-limit').show();
 
       // Shake animation
@@ -97,7 +101,6 @@ document.onkeypress = function(evt) {
 }
 
 function readSentence(){
-
   var fullSentence = "";
   for (var i = 0 ; i < sentence.length;i++){
     fullSentence += sentence[i];
@@ -107,7 +110,6 @@ function readSentence(){
 
 function focusLine(num){
   $('#'+num).show();
-  // $('#'+num).val("");
   $('#'+num).focus();
   $('#'+num).val("");
 }
@@ -158,7 +160,6 @@ function tryScan(charStr){
 //called when the RFID has been scanned and the user can type in the next input
 function scanned(){
   speak("scanned", { amplitude: 100, pitch: 30, speed: 135, wordgap: 5 });
-  focusLine(wordIndex);
 }
 
 function isNumber(n) {
@@ -168,13 +169,18 @@ function isNumber(n) {
 //change which input we're on, set focus to new input
 function nextWord(){
   readSentence();
+
   //RESET 
   currentStatus = StatusEnum.READY;
   RFID="";
 	wordIndex = (wordIndex+1)%numWords;
   focusLine(wordIndex);
   hideLine(wordIndex);
+
+  $('#scanid').show();
+
   //if we've looped back to beginning, clear all words
+
 	if (wordIndex === 0){
 		clearAll();
 	}
