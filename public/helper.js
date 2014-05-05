@@ -12,8 +12,10 @@ var StatusEnum = {
   TYPING : 2
 }
 
+// Keyboard Keys
 var BACKSPACE = 8,
     ENTER = 13;
+
 var currentStatus = StatusEnum.READY; 
 
 //manually keep track of every string
@@ -36,36 +38,55 @@ document.onkeydown = function(evt) {
   var charCode = evt.keyCode || evt.which;
   if (currentStatus === StatusEnum.TYPING) {
     if (charCode === BACKSPACE) {
-      $('#char-limit').hide();1
+      $('#char-limit').hide();
       sentence[wordIndex] = sentence[wordIndex].substring(0, sentence[wordIndex].length - 1);
-    } 
+    }
   }
 }
 
 
 //KEY PRESS CAN EITHER BE RFID OR KEYBOARD INPUT 
 document.onkeypress = function(evt) {
-      
+
   evt = evt || window.event;
   var charCode = evt.keyCode || evt.which;
+
   //GRAB INPUT
   var charStr = String.fromCharCode(charCode);
+
   //READ RFID
   if (currentStatus == StatusEnum.READY || currentStatus == StatusEnum.SCANNING){
     tryScan(charStr);
   }
  
-  else if (currentStatus === StatusEnum.TYPING){
-    
+  else if (currentStatus === StatusEnum.TYPING) {
+
+    // Turns on "Press ENTER to submit caption"
     $('#caption').show();
-    if (sentence[wordIndex].length < MAX_WORD_LENGTH){
-      sentence[wordIndex] += charStr;
-    } else if (charCode === ENTER) {
+
+    // If "ENTER" pressed
+    if (charCode === ENTER) {
+
+      // Hides helper captions
       $('.caption').hide();
+
+      // Pulse animation
+      $('#' + wordIndex).animate({fontSize:"150px", height: "180px"});
+      setTimeout(function() {}, 1000);
+      $('#' + wordIndex).animate({fontSize:"120px", height: "150px"});
+
+      // Proceeds to next word
       nextWord();
-    }
-    else {
+
+    // If length is less than MAX_WORD_LENGTH
+    } else if (sentence[wordIndex].length < MAX_WORD_LENGTH){
+      sentence[wordIndex] += charStr;
+
+    // If length is more than MAX_WORD_LENGTH
+    } else {
       $('#char-limit').show();
+
+      // Shake animation
       $('#' + wordIndex).css("-webkit-animation-play-state", "running");
       setTimeout(function() {
         $('#' + wordIndex).css("-webkit-animation-play-state", "paused");
@@ -86,6 +107,7 @@ function readSentence(){
 
 function focusLine(num){
   $('#'+num).show();
+  // $('#'+num).val("");
   $('#'+num).focus();
   $('#'+num).val("");
 }
@@ -98,9 +120,9 @@ function hideLine(num){
 function tryScan(charStr){
   var currentDate = new Date(); 
   if (isNumber(charStr)){
-    //START SCANNING
-    if (currentStatus == StatusEnum.READY){
 
+    //START SCANNING
+    if (currentStatus === StatusEnum.READY){
       scanStartMillis = currentDate.getTime();
       RFID = RFID + charStr; 
       currentStatus = StatusEnum.SCANNING; 
@@ -110,17 +132,17 @@ function tryScan(charStr){
       var scanEndMillis = currentDate.getTime();
       var scanTime = scanEndMillis - scanStartMillis;
       if (scanTime < SCAN_TIMEOUT){
-        if (RFID.length === 5){
-          if (RFID === lastRFID){
+        if (RFID.length === 5) {
+          if (RFID === lastRFID) {
             speak("can't use same R.F.I.D. twice" , { amplitude: 100, pitch: 30, speed: 135, wordgap: 5 });
             currentStatus = StatusEnum.READY;
             RFID = "";
           }
           else {
-            currentStatus = StatusEnum.TYPING;
             lastRFID = RFID;
             sentence[wordIndex] = "";
             scanned();
+            currentStatus = StatusEnum.TYPING;
           }
         }
       }
@@ -165,5 +187,4 @@ function clearAll(){
     $("#" + i).hide()
 	}
   sentence = [];
-  //$("#0").show();
 }
