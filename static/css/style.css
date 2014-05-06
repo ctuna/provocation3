@@ -1,4 +1,4 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
+/* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
@@ -85,9 +85,38 @@ body {
   text-transform: uppercase;
   color: white; }
 
+#caption, #scanid {
+  float:left;
+  margin-top: 40px;
+}
+
 #char-limit {
   font-size: 20px;
+  position: absolute;
   margin-top: 5px; }
+
+.arrow {
+    width:200px;
+    float:left;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+.line {
+    margin-top:24px;
+    width:140px;
+    background:white;
+    height:50px;
+    float:left;
+}
+.point {
+    width: 0;
+    height: 0;
+    border-top: 50px solid transparent;
+    border-bottom: 50px solid transparent;
+    border-left: 60px solid white;
+    float:right;
+}
 
 @-webkit-keyframes shake {
   0%, 100% {

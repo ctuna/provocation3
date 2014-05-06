@@ -60,6 +60,8 @@ document.ready = function (){
 //KEY PRESS CAN EITHER BE RFID OR KEYBOARD INPUT
 document.onkeypress = function(evt) {
 
+  $('#arrow').show();
+
   evt = evt || window.event;
   var charCode = evt.keyCode || evt.which;
 
@@ -176,6 +178,7 @@ function tryScan(charStr){
 function scanned(){
   speak(scannedString, { wordgap: 5 });
   $('#scanid').hide();
+  $('#arrow').hide();
 }
 
 function isNumber(n) {
