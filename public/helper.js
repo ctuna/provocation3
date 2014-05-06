@@ -6,6 +6,11 @@ var numWords = 5;
 //boolean ready if true they have scanned ID,
 // if false they haven't yet and can't type
 
+
+//STRINGS
+var scannedString = "Scanned! you may now type a word";
+var scannedTwiceString=  "You cannot type two words in a row."
+
 var StatusEnum = {
   READY : 0,
   SCANNING : 1,
@@ -34,8 +39,12 @@ var RFID = "";
 
 //for backspace detection
 document.onkeydown = function(evt) {
+
   evt = evt || window.event;
   var charCode = evt.keyCode || evt.which;
+  if (evt.keyCode == 119){
+    clearLastWord();
+  }
   if (currentStatus === StatusEnum.TYPING) {
     if (charCode === BACKSPACE) {
       $('#char-limit').hide();
@@ -44,6 +53,9 @@ document.onkeydown = function(evt) {
   }
 }
 
+document.ready = function (){
+  $('#scanid').show();
+}
 
 //KEY PRESS CAN EITHER BE RFID OR KEYBOARD INPUT
 document.onkeypress = function(evt) {
@@ -103,9 +115,9 @@ document.onkeypress = function(evt) {
 function readSentence(){
   var fullSentence = "";
   for (var i = 0 ; i < sentence.length;i++){
-    fullSentence += sentence[i];
+    fullSentence += sentence[i] + " ";
   }
-  speak(fullSentence, { amplitude: 100, pitch: 30, speed: 135, wordgap: 5 });
+  speak(fullSentence, {  wordgap: 5 });
 }
 
 function focusLine(num){
@@ -136,14 +148,16 @@ function tryScan(charStr){
       if (scanTime < SCAN_TIMEOUT){
         if (RFID.length === 5) {
           if (RFID === lastRFID) {
-            speak("can't use same R.F.I.D. twice" , { amplitude: 100, pitch: 30, speed: 135, wordgap: 5 });
+            speak(scannedTwiceString , { wordgap: 5});
             currentStatus = StatusEnum.READY;
             RFID = "";
+
           }
           else {
             lastRFID = RFID;
             sentence[wordIndex] = "";
             scanned();
+
             currentStatus = StatusEnum.TYPING;
 
           }
@@ -160,7 +174,8 @@ function tryScan(charStr){
 
 //called when the RFID has been scanned and the user can type in the next input
 function scanned(){
-  speak("scanned", { amplitude: 100, pitch: 30, speed: 135, wordgap: 5 });
+  speak(scannedString, { wordgap: 5 });
+  $('#scanid').hide();
 }
 
 function isNumber(n) {
@@ -169,16 +184,17 @@ function isNumber(n) {
 
 //change which input we're on, set focus to new input
 function nextWord(){
-  var currentDate = new Date();
-  var currentTime = currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
-  var jason = JSON.stringify({RFID: lastRFID, "WORD": sentence[wordIndex], "WORD_INDEX": wordIndex, "time": currentTime });
-  readSentence();
+  var dte = new Date();
+  var currentDate = dte.getMonth() + "/" + dte.getDay() + dte.getFullYear()
+  var currentTime = dte.getHours() + ":" + dte.getMinutes() + ":" + dte.getSeconds();
+  var jason = JSON.stringify({RFID: lastRFID, "WORD": sentence[wordIndex], "WORD_INDEX": wordIndex, "date": currentDate, "time": currentTime });
   console.log(jason);
+  readSentence();
 
   //RESET
   currentStatus = StatusEnum.READY;
   RFID="";
-	wordIndex = (wordIndex+1)%numWords;
+  wordIndex = (wordIndex+1)%numWords;
   focusLine(wordIndex);
   hideLine(wordIndex);
 
@@ -186,16 +202,22 @@ function nextWord(){
 
   //if we've looped back to beginning, clear all words
 
-	if (wordIndex === 0){
-		clearAll();
-	}
+  if (wordIndex === 0){
+    clearAll();
+  }
 }
 
 //clear all text in all inputs and hide them (except 0)
 function clearAll(){
-	for (var i = 0 ; i < numWords;i++){
-		$("#" + i).val("");
+  for (var i = 0 ; i < numWords;i++){
+    $("#" + i).val("");
     $("#" + i).hide()
-	}
+  }
   sentence = [];
 }
+
+
+
+
+
+
