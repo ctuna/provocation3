@@ -1,11 +1,11 @@
 //current input ID
 var wordIndex;
-var MAX_WORD_LENGTH = 9
+var MAX_WORD_LENGTH = 12;
 var numWords = 7;
 
 //boolean ready if true they have scanned ID,
 // if false they haven't yet and can't type
-
+var firstKeyPress = true;
 
 //STRINGS
 var scannedString = "Scanned! Type ";
@@ -81,7 +81,7 @@ function pickWord(){
   if (indexIndex>-1){
     currentRemainingWords.splice(indexIndex, 1);
   }
-  $("#" + wordIndex).val(currentWords[wordIndex]);
+
   $("#" + wordIndex).css("color", "#6DD0F7");
   console.log("MAKIN IT BLUE");
 }
@@ -102,6 +102,10 @@ document.onkeypress = function(evt) {
   }
 
   else if (currentStatus === StatusEnum.TYPING) {
+    if (firstKeyPress){
+      $("#" + wordIndex).val("");
+      firstKeyPress= false;
+    }
     focusLine(wordIndex);
 
     // Turns on "Press ENTER to submit caption"
@@ -143,11 +147,8 @@ document.onkeypress = function(evt) {
 }
 
 function readSentence(){
-  var fullSentence = "";
-  for (var i = 0 ; i < sentence.length;i++){
-    fullSentence += sentence[i] + " ";
-  }
-  speak(fullSentence, {  wordgap: 5 });
+
+  speak("Thank you. Now leave", {  wordgap: 5 });
 }
 
 function focusLine(num){
@@ -184,6 +185,7 @@ function tryScan(charStr){
 
           }
           else {
+            $("#" + wordIndex).val(currentWords[wordIndex]);
             lastRFID = RFID;
             sentence[wordIndex] = "";
             scanned();
@@ -211,7 +213,7 @@ function scanned(){
   }
   else {speak(scannedString + " a " + currentWords[wordIndex], { wordgap: 5 });
 }
-  $("#" + wordIndex).val("");
+  //$("#" + wordIndex).val("");
   $('#scanid').hide();
 
   //$('#arrow').hide();
@@ -224,6 +226,7 @@ function isNumber(n) {
 
 //change which input we're on, set focus to new input
 function nextWord(){
+  firstKeyPress= true;
   $("#" + wordIndex).css("color", "white");
   var dte = new Date();
   var currentDate = dte.getMonth() + "/" + dte.getDay() + dte.getFullYear()
@@ -231,7 +234,7 @@ function nextWord(){
   var jason = JSON.stringify({RFID: lastRFID, "WORD": sentence[wordIndex], "WORD_INDEX": wordIndex, "date": currentDate, "time": currentTime });
 
   console.log(jason);
-  //readSentence();
+  readSentence();
 
   //RESET
   currentStatus = StatusEnum.READY;

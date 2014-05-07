@@ -13,7 +13,7 @@ var stdin = process.openStdin();
 //different ports for different folks' arduino
 var clairePort = "/dev/tty.usbserial-A9014F2U"
 var elizabethPort =  "/dev/tty.usbserial-AD02AY8A"
-var ianPort = "/dev/tty.usbmodem1411"
+var ianPort = "/dev/tty.usbmodem1d1141"
 var portName = ianPort; //TODO: change for your local system
 var serialport = require("serialport");
 var SerialPort = serialport.SerialPort; // localize object constructor
