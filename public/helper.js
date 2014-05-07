@@ -1,14 +1,14 @@
 //current input ID
-var wordIndex = 0;
+var wordIndex;
 var MAX_WORD_LENGTH = 9
-var numWords = 5;
+var numWords = 7;
 
 //boolean ready if true they have scanned ID,
 // if false they haven't yet and can't type
 
 
 //STRINGS
-var scannedString = "Scanned! you may now type a word";
+var scannedString = "Scanned! Type ";
 var scannedTwiceString=  "You cannot type two words in a row."
 
 var StatusEnum = {
@@ -20,7 +20,13 @@ var StatusEnum = {
 // Keyboard Keys
 var BACKSPACE = 8,
     ENTER = 13;
+//SENTENCE CONSTRUCTION:
 
+currentWords = ["the", "noun", "adverb", "verb", "the", "adjective", "noun"];
+articles = ["the", "his", "her", "my", "its"];
+//TODO: count not "thes to construct on the fly"
+currentRemainingWords = [];
+remainingWords = [1, 2, 3, 5, 6];
 var currentStatus = StatusEnum.READY;
 
 //manually keep track of every string
@@ -36,6 +42,8 @@ var lastRFID="";
 var SCAN_TIMEOUT= 40000;
 //RFID so far
 var RFID = "";
+
+
 
 //for backspace detection
 document.onkeydown = function(evt) {
@@ -54,9 +62,29 @@ document.onkeydown = function(evt) {
 }
 
 document.ready = function (){
-  $('#scanid').show();
+  console.log("HELLOOOO");
+  pickWord();
+  initializeSentence();
+  //$('#scanid').show();
 }
+function pickWord(){
+  if (currentRemainingWords.length == 0){
+    currentRemainingWords = remainingWords.slice(0);
+    $("#0").val(articles[Math.floor(Math.random()*articles.length)]);
 
+    $("#4").val(articles[Math.floor(Math.random()*articles.length)]);
+  }
+
+  wordIndex = currentRemainingWords [Math.floor(Math.random()*currentRemainingWords.length)];
+  var indexIndex = currentRemainingWords.indexOf(wordIndex);
+  console.log("picked word : " + wordIndex);
+  if (indexIndex>-1){
+    currentRemainingWords.splice(indexIndex, 1);
+  }
+  $("#" + wordIndex).val(currentWords[wordIndex]);
+  $("#" + wordIndex).css("color", "#6DD0F7");
+  console.log("MAKIN IT BLUE");
+}
 //KEY PRESS CAN EITHER BE RFID OR KEYBOARD INPUT
 document.onkeypress = function(evt) {
 
@@ -89,7 +117,7 @@ document.onkeypress = function(evt) {
       // Pulse animation
       $('#' + wordIndex).animate({fontSize:"150px", height: "180px"});
       setTimeout(function() {}, 1000);
-      $('#' + wordIndex).animate({fontSize:"120px", height: "150px"});
+      $('#' + wordIndex).animate({fontSize:"80px", height: "110px"});
 
       // Proceeds to next word
       nextWord();
@@ -172,13 +200,22 @@ function tryScan(charStr){
       }
       }
     }
+
   }
 
 //called when the RFID has been scanned and the user can type in the next input
 function scanned(){
-  speak(scannedString, { wordgap: 5 });
+  if (currentWords[wordIndex] == "adjective" || currentWords[wordIndex]=="adverb"){
+
+     speak(scannedString + " annnnnnnn " + currentWords[wordIndex], { wordgap: 5 });
+  }
+  else {speak(scannedString + " a " + currentWords[wordIndex], { wordgap: 5 });
+}
+  $("#" + wordIndex).val("");
   $('#scanid').hide();
+
   $('#arrow').hide();
+
 }
 
 function isNumber(n) {
@@ -187,21 +224,23 @@ function isNumber(n) {
 
 //change which input we're on, set focus to new input
 function nextWord(){
+  $("#" + wordIndex).css("color", "white");
   var dte = new Date();
   var currentDate = dte.getMonth() + "/" + dte.getDay() + dte.getFullYear()
   var currentTime = dte.getHours() + ":" + dte.getMinutes() + ":" + dte.getSeconds();
   var jason = JSON.stringify({RFID: lastRFID, "WORD": sentence[wordIndex], "WORD_INDEX": wordIndex, "date": currentDate, "time": currentTime });
+
   console.log(jason);
-  readSentence();
+  //readSentence();
 
   //RESET
   currentStatus = StatusEnum.READY;
   RFID="";
-  wordIndex = (wordIndex+1)%numWords;
+  pickWord();
   focusLine(wordIndex);
-  hideLine(wordIndex);
+  //hideLine(wordIndex);
 
-  $('#scanid').show();
+  //$('#scanid').show();
 
   //if we've looped back to beginning, clear all words
 
@@ -217,6 +256,16 @@ function clearAll(){
     $("#" + i).hide()
   }
   sentence = [];
+}
+
+function initializeSentence(){
+
+  for (var i = 0 ; i < numWords;i++){
+    $("#" + i).val(currentWords[i]);
+    $("#" + i).show()
+  }
+  //MAKE SELECTED WORD COLOR
+
 }
 
 

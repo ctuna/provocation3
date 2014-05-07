@@ -63,9 +63,9 @@ body {
   -webkit-transform: rotateX(-29deg) scaleX(0.95); }
 
 .sentence {
-  font: 120px "Oswald", "Helvetica", "Arial", sans-serif;
+  font: 80px "Oswald", "Helvetica", "Arial", sans-serif;
   text-transform: uppercase;
-  height: 150px;
+  height: 110px;
   color: white;
   background: none;
   border: none;
@@ -96,6 +96,7 @@ body {
   margin-top: 5px; }
 
 .arrow {
+    display: none;
     width:200px;
     float:left;
     margin-top: 10px;
@@ -103,6 +104,7 @@ body {
 }
 
 .line {
+    display: none;
     margin-top:24px;
     width:140px;
     background:white;
@@ -110,6 +112,7 @@ body {
     float:left;
 }
 .point {
+    display: none;
     width: 0;
     height: 0;
     border-top: 50px solid transparent;
