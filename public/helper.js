@@ -88,7 +88,7 @@ function pickWord(){
 //KEY PRESS CAN EITHER BE RFID OR KEYBOARD INPUT
 document.onkeypress = function(evt) {
 
-  $('#arrow').show();
+  //$('#arrow').show();
 
   evt = evt || window.event;
   var charCode = evt.keyCode || evt.which;
@@ -214,7 +214,7 @@ function scanned(){
   $("#" + wordIndex).val("");
   $('#scanid').hide();
 
-  $('#arrow').hide();
+  //$('#arrow').hide();
 
 }
 
@@ -237,8 +237,8 @@ function nextWord(){
   currentStatus = StatusEnum.READY;
   RFID="";
   pickWord();
-  focusLine(wordIndex);
-  //hideLine(wordIndex);
+  focusLine(11);
+  hideLine(11);
 
   //$('#scanid').show();
 

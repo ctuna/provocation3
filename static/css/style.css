@@ -120,6 +120,9 @@ body {
     border-left: 60px solid white;
     float:right;
 }
+#11 {
+  display:none;
+}
 
 @-webkit-keyframes shake {
   0%, 100% {
